@@ -44,3 +44,97 @@ let input: number = <number>returnedValue;
 ```
   - the *as* syntax can also be used `returnedValue as number`
 
+## Variable Declaration
+- `var` has function scope, leading to unexpected errors particularly with closures
+- `let` has block scope, not accessible outside their enclosing block
+  - can't be assigned before its declared
+  - can't be redeclared in the same scope
+  - capturing `let` variables works nicely without the need for *IIFE's*
+- `const` has the same scoping rules as `let` but assigned values cannot be changed
+  - it doesn't mean the value is *immutable* but cannot be assigned to another value
+- in strict terms `const` is preferred over `let` when it is know that varialbe should not be reassigned
+- *destructuring* allows variable declaration from arrays and objects
+```javascript
+let list = [1, 2];
+let [a, b] = list;
+console.log(a); // 1
+```
+- can destructure regular variables too `[a, b] = [c, d];`
+- and even function parameters `function f([x, y]: [number, number]) {`
+- remaining list items can grouped `let[first, ...rest] = [1, 2, 3, 4];` or just ignore them `let[first] = [1, 2, 3, 4];`
+- objects can also be destructured in a similar way to arrays
+```typescript
+let obj = { a: "one", b: "two", c: 3 };
+let {a, b} = o; // skip c
+let { a, b }: { a: string, b: number } = o; // with type
+let {a: newA, b: newB} = o; // property renaming
+```
+- can use default values, in case they are undefined `let { a, b = 10 } = obj`
+- the *spread* operator is the opposite of destructuring
+  - can "*spread*" array's into another `let list = [0, ...other, ...another]`
+  - and also object into other objects `{ ...defaults, food: "lots" }`
+  - spread goes from left to right, for object this means properties on the right will overwrite earlier ones with the same name
+  - only an objects own enumerable properties are spread, meaning functions will not be spread into the new object
+
+## Interfaces
+- essentially use *duck-typing* while enabling us to give these types a name
+```typescript
+interface Person {
+  name: string;
+  age: number;
+}
+```
+- interface properties can be optional and are marked with `?` after name
+```typescript
+interface Config {
+  color?: string;
+  limit: number;
+}
+```
+- when combining optional properties with mandatory ones, any unspecified properties in the declared object will cause an error
+- properties can also be `readonly` meaning they can't be modified after their initial creation for basic types, for objects their props can be changed but not the object itself
+- `ReadonlyArray<T>` is an array type with all the mutating methods removed, even assigning a new array object to the variable is not allowed
+- use `const` for variables and `readonly` on properties
+- interfaces can also define function types by giving a signature specifying name and type of parameters and return type
+  - no name is given to function signature, only params and return type
+  - the actual names of the params don't matter when implementing the function
+```typescript
+interface SearchFunc {
+  (source: string, subString: string): boolean;
+}
+```
+- when implementing a function type, type definitions can be inferred
+```typescript
+let search: SearchFunc = function(src, sub) {
+  return false;
+}
+```
+- interfaces can also define index types `[index: number]: string` meaning when the type is indexed into with a number it will return a string, an `Array<string>` for example
+  - indexers must be either `number` or `string`, can define both but must both return the same type
+  - indexed types do require all properties to be of the same type as the indexed return type
+- `implements` can be used explicitly on a class declaration to conform to an interface
+  - methods can be described in the interface that should be implemented in the class
+```typescript
+interface Device {
+  status: number;
+  restart(message: string);
+}
+```
+- interfaces can extend each other with `extends` keyword, including multiple inheritenance
+- it may be necessary to create hybrid types with dealing with third-party JavaScript
+- you may have a function type and regular properties together
+```typescript
+interface Counter {
+  (start: number): string;
+  interval: number;
+  reset(): void;
+}
+
+function getCounter(): Counter {
+  let counter = <Counter>function(start: number) {};
+  counter.interval = 123;
+  counter.reset = function() {};
+  return counter;
+}
+```
+- interfaces can extend classes and inherit all public, private and protected members
