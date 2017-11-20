@@ -138,3 +138,43 @@ function getCounter(): Counter {
 }
 ```
 - interfaces can extend classes and inherit all public, private and protected members
+
+## Classes
+- designed to model standard OO classes found in C# or Java
+- the `constructor` keyword is used to define a ctor
+- properties and methods are declared without `let` or `function`
+```typescript
+class Greeter {
+  greeting: string;
+  constructor(greeting: string) {
+    this.greeting = greeting;
+  }
+  greet() {
+    return `Hello, ${this.greeting}`;
+  }
+}
+```
+- create a new class instance object with the `new` keyword; `new Animal()`
+- `this` is required when accessing class members within the class
+- use `extends` for class inheritenance
+- subclasses defining a constructor must use `super()` as the first statement
+- to call superclass methods use `super.someMethod()`
+- class members can have `public`, `protected` or `private` access
+- all members are `public` by default, but can be declard explicilty
+- `private` members can't be accessed outside their declaring class
+- `protected` is the same as `private` except that it does allow access from within subclasses
+- TypeScript is a structural type system, and as such structures must match in order for instances to be assigned to one another
+  - when `private` and `protected` members are involved, for a structural match the non public members must have been declared at the same point in the inheritance tree
+- properties can also be `readonly` and can't be changed after initialization
+- parameter properties provide a shortcut to declaring class properties
+  - properties are defined in the constructors parameters by using an accessibility modifier and/or `readonly`
+```typescript
+constructor(public name: string, private age: number) {}
+```
+- getters and setters can be defined on a property, using `get` and `set`
+  - compiler needs to be set to ECMA 5 or above to support this
+  - a `get` with no `set` are implicitly `readonly`
+- class members are defined using `static`
+- `abstract` classes can contain method implementations and constructors, but cannot be instantiated
+  - `abstract` methods signatures can be declared in a similar way to interfaces, these must be implemented in any subclasses
+- classes define types and therefore interfaces can inherit from them
