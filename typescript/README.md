@@ -178,3 +178,71 @@ constructor(public name: string, private age: number) {}
 - `abstract` classes can contain method implementations and constructors, but cannot be instantiated
   - `abstract` methods signatures can be declared in a similar way to interfaces, these must be implemented in any subclasses
 - classes define types and therefore interfaces can inherit from them
+
+## Functions
+- named and anonymous functions supported
+- parameters and return value can be typed
+- to the declare the funciton type i.e. when assigned to a variable, we use:
+```typescript
+let f: (x: number, y: number) => number; // arrow used to make return type clear
+f = function(first: number, last: number): number {
+  return x + y;
+}
+```
+- typescript will use type inference if only one side of the assignment statement is typed
+```typescript
+let fx: function(x: number, y: number): number { return x + y; };
+```
+- the number of parameters declared for a function must match the number when called
+- parameters can be made optional with `?` after the name `name?: string`
+  - optionals must come after required
+- parameters can have default values `fn(first: string, x = 3)`
+  - params with defaults coming after all required are treated as optional
+- *rest* parameters, are variable length params zero or more contained in a single array param, indicated with an ellipses before the name (this also used in the function type)
+```typescript
+function(x: number, y: number, ...otherNumbers: number[]) { }
+```
+- `--noImplicitThis` compiler flag alerts to you to possilbe mistakes when using `this` in funcitons
+- *this* parameters can be used to enforce consistent type on the this object, using a fake `this` param as the first parameter of a function `function(this: Animal, name: string) {}`
+- function overloads can be used to when a return value can be `any` number of different types
+```typescript
+function prepare(x: {list: string, amount: number}): string;
+function prepare(x: string): string;
+function prepare(x): any {
+  // do things
+}
+```
+
+## Enums
+- use the `enum` keyword for either numeric or string based enums
+```typescript
+enum Points {
+  North,
+  South,
+  East,
+  West,
+}
+```
+- numeric values are zero based and in order
+- can specify all numbers or just the starting number
+```typescript
+  North = 1,
+  South,
+```
+- use like `let direction: Points = Points.East`
+- *string* enums must be explictily initialized, either with string literal or another string enum member
+```typescript
+enum Orientation {
+  Up = "U",
+  Down = "D",
+  Left = "L",
+  Right = "R",
+}
+```
+- numeric enums can be reversed mapped to their name (doesn't work with string enums)
+```typescript
+let a = Points.North;
+let name = Points[a] // "North"
+```
+- use `const enum Things { }` to have enum values be inlined
+
