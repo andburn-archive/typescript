@@ -246,3 +246,39 @@ let name = Points[a] // "North"
 ```
 - use `const enum Things { }` to have enum values be inlined
 
+## Generics
+- generics allow us to build components that work with many types, without having to resort to using `any`
+```typescript
+function identity<T>(arg: T): T {
+  return arg;
+}
+```
+- here `T` is called a *type variable*
+- explicitly call with a *type variable* `let a = identity<string>("input");`, it can also be left out and allow the compiler to infer the type
+- attempting to access members of `arg` in this example, will not compile as `T` represents all and any type
+- generic function types add the type variable to the signature `let func: <T>(arg: T) => T;`
+- similarly `<T>(arg: T): T;` would be used in an interface
+- the interface itself can be declared generic giving us:
+```typescript
+interface List<T> {
+  (i: number): T;
+}
+```
+- generic classes are created in a similar manner, static members cannot use the type parameter of the class, however
+- generic constraints enable limiting the generic variable to a certain shape
+```typescript
+interface Measureable {
+  length: number;
+}
+
+function DoThings<T extends Measurable>(arg: T): void {
+  let len = arg.length;
+  // do something with len
+}
+```
+- to create generic factory functions, types need to be referred to by their constructor function
+```typescript
+function createInstance<A extends Animal>(c: new() => A): A { // or (c: {new(): A; }): A
+  return new c();
+}
+```
