@@ -282,3 +282,22 @@ function createInstance<A extends Animal>(c: new() => A): A { // or (c: {new(): 
   return new c();
 }
 ```
+
+## Advanced Typing
+- **Type inference** is performed in certain circumstances when no type is given
+  - variable and other member initialization 
+  - setting parameter default values
+  - function return types
+  - in the case of multiple types e.g. in an array, an attempt is made to find a best common type and if that fails a *union* is used
+- **Type compatibility** is based on structure not naming
+  - type `A` is said to be compatiable with `B` if `B` has *at least* the same members as `A`
+  - *i.e.* only members of the target type are considered
+  - for functions the target type must have a compatiable parameter for each fo the assignee's parameters, this allows parameter skipping (as JavaScript allows)
+  - however, if the assignable type has more required parameters than the target type it is not compatiable
+  - optional and required parameters are interchangeable for compatiability
+  - rest parameters are considered to be a infinite series of optional params
+  - enums are compatiable with numbers and vice versa
+  - classes behave the same as literal objects, except that only the instance part is compared (not static or constructors)
+- **Intersection types** use the `&` to combine multiple types into one `let x: A & B = { }`
+- **Union types** allow a type to be one of selection of types `let x: A | B = {}`
+  - the resulting variable can only access common to all of the unions types
