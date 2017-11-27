@@ -22,7 +22,7 @@ let b: Array<number> = [1, 2, 3];
 let x: [string, number];
 x = ["ciao", 5];
 ```
-  - on retreival types are retained
+  - on retrieval types are retained
   - elements outside the known range of the tuple (using it as a regular array), 
   have the *union* type
 - enums can be declared with or without values, a starting value can be defined on the first element (default is 0)
@@ -156,11 +156,11 @@ class Greeter {
 ```
 - create a new class instance object with the `new` keyword; `new Animal()`
 - `this` is required when accessing class members within the class
-- use `extends` for class inheritenance
+- use `extends` for class inheritance
 - subclasses defining a constructor must use `super()` as the first statement
 - to call superclass methods use `super.someMethod()`
 - class members can have `public`, `protected` or `private` access
-- all members are `public` by default, but can be declard explicilty
+- all members are `public` by default, but can be declared explicitly
 - `private` members can't be accessed outside their declaring class
 - `protected` is the same as `private` except that it does allow access from within subclasses
 - TypeScript is a structural type system, and as such structures must match in order for instances to be assigned to one another
@@ -182,7 +182,7 @@ constructor(public name: string, private age: number) {}
 ## Functions
 - named and anonymous functions supported
 - parameters and return value can be typed
-- to the declare the funciton type i.e. when assigned to a variable, we use:
+- to the declare the function type i.e. when assigned to a variable, we use:
 ```typescript
 let f: (x: number, y: number) => number; // arrow used to make return type clear
 f = function(first: number, last: number): number {
@@ -267,7 +267,7 @@ interface List<T> {
 - generic classes are created in a similar manner, static members cannot use the type parameter of the class, however
 - generic constraints enable limiting the generic variable to a certain shape
 ```typescript
-interface Measureable {
+interface Measurable {
   length: number;
 }
 
@@ -290,14 +290,46 @@ function createInstance<A extends Animal>(c: new() => A): A { // or (c: {new(): 
   - function return types
   - in the case of multiple types e.g. in an array, an attempt is made to find a best common type and if that fails a *union* is used
 - **Type compatibility** is based on structure not naming
-  - type `A` is said to be compatiable with `B` if `B` has *at least* the same members as `A`
+  - type `A` is said to be compatible with `B` if `B` has *at least* the same members as `A`
   - *i.e.* only members of the target type are considered
-  - for functions the target type must have a compatiable parameter for each fo the assignee's parameters, this allows parameter skipping (as JavaScript allows)
-  - however, if the assignable type has more required parameters than the target type it is not compatiable
-  - optional and required parameters are interchangeable for compatiability
+  - for functions the target type must have a compatible parameter for each fo the assignee's parameters, this allows parameter skipping (as JavaScript allows)
+  - however, if the assignable type has more required parameters than the target type it is not compatible
+  - optional and required parameters are interchangeable for compatibility
   - rest parameters are considered to be a infinite series of optional params
-  - enums are compatiable with numbers and vice versa
+  - enums are compatible with numbers and vice versa
   - classes behave the same as literal objects, except that only the instance part is compared (not static or constructors)
-- **Intersection types** use the `&` to combine multiple types into one `let x: A & B = { }`
-- **Union types** allow a type to be one of selection of types `let x: A | B = {}`
-  - the resulting variable can only access common to all of the unions types
+- **Intersection types** use the `&` to combine multiple types into one `let x: A & B`
+  - the object must have members of all types in the intersection
+  - fits situations that don't fall into classic OO scenarios
+- **Union types** allow a type to be one of selection of types `let x: A | B`
+  - the resulting variable can only access members common to all of the unions types
+- **Type Guards** return a *type predicate* that enables us to guarantees the type at runtime  (in some scope), avoiding repetitious *type assertions (casts)*
+  - used in a similar way to the JavaScript pattern of checking an object has a particular member
+```typescript
+function isFish(pet: Fish | Bird): pet is Fish {
+  return (<Fish>pet).swim !== undefined;
+}
+
+if (isFish(pet)) {
+  pet.swim(); // this branch knows pet is a Fish
+} else {
+  pet.fly(); // and this branch knows its not Fish, so must be a Bird!
+}
+```
+  - **typeof** guards are recognized automatically `if (typeof x === "number") { }`, *x* is recognized as a number in that branch (will only work for primitives e.g. *number, string, boolean, symbol*)
+  - **instanceof** is also recognized as a type guard when the RHS is a constructor function
+- *union's* can also be used when using `--strictNullChecks` to allow `null` assignment `let s: string | null = "bar"; s = null;`
+- **Type alias** can create new names for types even primitives, union and tuples. They can also be generic.
+```typescript
+type Label = string;
+type Container<T> = { value: T; }
+```
+- **Polymorphic this types** are types that are a subtype of the containing class or interface, allowing reuse of inherited code without the need for any change
+- **Index types** enable type checking on the accessing dynamic property names
+- **Mapped types** create new types based on old types, each property of the type is transformed in the same way to give a new type
+```typescript
+type Readonly<T> = {
+  readonly [P in keyof T]: T[P];
+}
+type ReadonlyPerson = Readonly<Person>;
+```

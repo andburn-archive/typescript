@@ -4,6 +4,7 @@ interface A {
 
 interface B {
     s: string;
+    q: boolean;
 }
 
 interface C {
@@ -11,11 +12,25 @@ interface C {
     p: string;
 }
 
-let intersection: A & B = { n: 3, s: "hello" };
+class NumStr {
+    n: number;
+    p: string;
+}
 
-let unionFail: A | B = { n: 0, s: "" };
-//unionFail.s; // can only access common to both A and B, which there are none
+/* 
+    An intersection must specify all known properties of all its types.
+*/
+let intersectAB: A & B = { n: 2, s: "intersect", q: false };
+console.log(intersectAB.s);
+/* 
+    For a union, any known properties of any of its types can be specified,
+    but only those that are common to all can be accessed.
+*/
+let unionAB: A | B = { n: 2, s: "union"}; 
+unionAB.s; // error, doesn't exist on type
 
-let union: A | C = { n: 0, p: "num" };
-union.n;
-union.p; // ??? why does this work
+let unionAC: A | C = { n: 0, p: "extra" };
+console.log(unionAC.n);
+console.log(unionAC.p); // not on the type, but works for object literals
+unionAC = new NumStr();
+console.log(unionAC.p); // but, errors for instance objects
