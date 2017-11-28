@@ -333,3 +333,27 @@ type Readonly<T> = {
 }
 type ReadonlyPerson = Readonly<Person>;
 ```
+
+## Symbols
+- support for new JavaScript primitive `symbol`
+- created with the `Symbol` constructor
+```typescript
+let sym1 = Symbol();
+let sym2 = Symbol("thing");
+```
+- symbols are immutable and unique `Symbol("key") !=== Symbol("key")`
+- can be used liked strings as property names `{ name: "symbol", [sym1]: 3 }`
+- has a number of well-known symbols e.g. `Symbol.hasInstance`, `Symbol.match`
+
+## Iterators
+- an object is iterable if it has an implementation for the `Symbol.iterator` property
+- `for..of` statement expects an iterable
+- `for..in` works on any object
+- ES5 and ES3 targets only support iterators on the `Array` type, and `for..of` will cause an error on any other type
+- *ECMAScript2016* supports custom iterators and `for..of`
+
+## Mixins
+- combine simpler classes into one
+- the new class `implements` the mixins as interfaces only
+- stubs are created for the mixin members
+- a *mixing* helper function is used to copy the mixin implementations over
