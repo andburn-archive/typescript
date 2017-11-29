@@ -357,3 +357,29 @@ let sym2 = Symbol("thing");
 - the new class `implements` the mixins as interfaces only
 - stubs are created for the mixin members
 - a *mixing* helper function is used to copy the mixin implementations over
+
+## Miscellaneous
+- *Triple-Slash Directives* are single line comments at the top of the file containing an XML tag. They define preprocessor directions for the compiler.
+- *Decorators* can be applied to classes, methods and properties. Currently an experimental feature.
+
+## Namespaces
+- use namespaces to group code together and avoid collisions in the global scope
+- the `export` keyword is used to define what namespace elements should be available outside of the namespace
+```typescript
+namespace Zoo {
+  export class Animal {
+    string: name;
+    move(): void {}
+  }
+
+  function helper() {
+    // does some internal things
+  }
+}
+// outside we access with namespace name
+let dog = new Zoo.Animal();
+```
+- the same namespace can span multiple files, by using reference tags to define dependencies between files
+  - to reference a file use `/// <reference path="file.ts" />`
+  - the `--outFile` compiler flag concatenates all output to a single file in the order that the reference tags are given
+- use `import` to give an alias to namespace members `import beast = Zoo.Animal`

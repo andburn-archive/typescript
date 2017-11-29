@@ -51,3 +51,35 @@ function _decodeMorse(morseCode: string): string {
         .map(word => word.split(' ').map(char => MORSE_CODE[char]).join(''))
         .join(' ')
 }
+
+/*  Reverse or rotate? (6 kyu)
+    https://www.codewars.com/kata/reverse-or-rotate
+*/
+// Solution
+function revrot(str, sz): string {
+    if (sz <= 0 || str === "" || sz > str.length) {
+        return "";
+    }
+    let isReversible = function(digits): boolean {      
+        let cubeSum = digits.map(x => parseInt(x, 10)).reduce((x, y) => x + y ** 3);
+        return cubeSum % 2 === 0;      
+    }
+    let output = "";
+    let digits = Array.from(str);
+    let i = 0;
+    while (i < digits.length) {
+        let chunk = digits.slice(i, i + sz)
+        if (chunk.length < sz) {
+            break;
+        }
+        if (isReversible(chunk)) {
+            output += chunk.reverse().join("");
+        } else {
+            let rot = chunk.slice(1);
+            rot.push(chunk[0]);
+            output += rot.join("");
+        }
+        i += sz;
+    }
+    return output;
+}
