@@ -383,3 +383,40 @@ let dog = new Zoo.Animal();
   - to reference a file use `/// <reference path="file.ts" />`
   - the `--outFile` compiler flag concatenates all output to a single file in the order that the reference tags are given
 - use `import` to give an alias to namespace members `import beast = Zoo.Animal`
+
+## Modules
+- like *ECMA 2015* modules
+- modules execute in their own scope and for anything to visible outside it needs to be explicitly *exported*
+- to use a component from a different module, the module needs to be *imported*
+- any file containing a top-level `import` or `export` is considered a module
+- the `export` keyword can be used on any declaration e.g. *class*, *function*, *variable* etc.
+- an *export* statement can alternatively used `export { AFunctionAsIS };`
+- when the internal name needs to be changed for consumers of the module the *export* statement can also be used `export { AFunctionAsIS as AnotherName };`
+- a module can extend another and partially expose some of its features `export { A as B } from "./OtherFile"`
+- a module could also wrap a number of others and combine all their exports
+```typescript
+export * from "./FirstFile";
+export * from "./SecondFile";
+```
+- *imports* from a module also have a number of possible options:
+```typescript
+import { AnExportedFunction } from "./ModuleFile";
+import { AnExportedFunction as MyFunction } from "./ModuleFile"; // rename
+// import whole module to a variable, and use it to access exports
+import * as moduleObj from "./Modulefile"
+```
+- use the `default` keyword to export something by default when the module is imported
+  - can only be one *default* export per module `export default SomeFunc`
+  - then import the module to a variable `import func from "./module"`
+  - to support *CommonJS* exports style object, typescript allows `export = Something` syntax, it cannot be used in conjugation with *default exports*
+    - using `export = ` requires the import to be of the form `import xyz = require("file");`
+  - the compilation target determines which JS module system is to used for translation
+- namespacing modules is generally a bad idea as modules already are mechanism for grouping code, namespacing them only needlessly complicates things
+
+
+## JSX
+- Developed for use with React
+- XML like that should be transformed into valid JavaScript
+- For typescript file should be named `.tsx` and enable the `--jsx` compiler option
+- type assertions `let foo = <foo>bar` are not allowed in `.tsx` use `as` instead
+

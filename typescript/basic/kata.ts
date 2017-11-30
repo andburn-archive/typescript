@@ -83,3 +83,48 @@ function revrot(str, sz): string {
     }
     return output;
 }
+
+/*  Length of missing array (6 kyu)
+    https://www.codewars.com/kata/length-of-missing-array
+*/
+// Solution
+function getLengthOfMissingArray(arrayOfArrays: any[]): number {
+    if (arrayOfArrays.length === 0) {
+        return 0;
+    }
+    for (let arr of arrayOfArrays) {
+        if (arr.length === 0) {
+            return 0;
+        }
+    }
+    arrayOfArrays.sort(function(a, b) {
+        if (a.length < b.length) {
+            return -1;
+        } else if (a.length > b.length) {
+            return 1;
+        }
+        return 0;
+    });
+    // assign the starting number
+    let count: number = arrayOfArrays[0].length;
+    // check the sorted list for the missing length
+    for (let i = 1; i < arrayOfArrays.length; i++) {
+        count++;
+        if (count !== arrayOfArrays[i].length) {
+            return count;
+        }
+    }
+    return 0;
+}
+// Community
+function _getLengthOfMissingArray(arrayOfArrays: any[]): number {
+    if (arrayOfArrays === null || arrayOfArrays.length === 0 ) return 0
+    
+    const emptyArr = arrayOfArrays.every(el => el.length > 0)
+    if (emptyArr === false) return 0
+    
+    const toNumArr = arrayOfArrays.map(el => el.length).sort((a, b) => a - b)
+  
+    const result = toNumArr.reduce((curr, next) => curr + 1 === next ? next : curr)
+    return result + 1
+  }
