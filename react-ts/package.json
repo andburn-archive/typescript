@@ -15,10 +15,13 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/enzyme": "^3.1.9",
     "@types/jest": "^22.2.2",
     "@types/node": "^6.0.104",
     "@types/react": "^16.3.2",
     "@types/react-dom": "^16.0.4",
+    "enzyme": "^3.3.0",
+    "react-addons-test-utils": "^15.6.2",
     "typescript": "^2.8.1"
   }
 }
